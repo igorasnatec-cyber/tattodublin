@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Tattoo Match | Dublin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1055612456827236');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1055612456827236&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<style>
+  :root{
+    --black:#0a0a0a;
+    --ink:#141414;
+    --paper:#f4f2ee;
+    --blood:#a3121f;
+    --grey:#8a8a8a;
+    --line:#2a2a2a;
+    --green:#3ddc84;
+    --gold:#d9b25f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{
+    background:var(--black);
+    color:var(--paper);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    height:100%;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  body{
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(163,18,31,0.06), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(255,255,255,0.03), transparent 40%);
+  }
+  .noise{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    opacity:0.03;pointer-events:none;z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E");
+  }
+  .wrap{
+    position:relative;z-index:2;
+    max-width:560px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    padding:0 28px;
+  }
+  header{
+    padding:30px 0 18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--line);
+  }
+  .logo{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:22px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--paper);
+  }
+  .logo span{color:var(--blood);}
+  .locale{
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--grey);
+  }
+  .progress-track{
+    height:2px;
+    background:var(--line);
+    width:100%;
+    margin-top:0;
+    position:relative;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--blood);
+    width:0%;
+    transition:width .5s cubic-bezier(.65,0,.35,1);
+  }
+
+  /* Offer bar: voucher reserved + live countdown */
+  .offer-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 14px;
+    margin-top:14px;
+    background:rgba(163,18,31,0.12);
+    border:1px solid rgba(163,18,31,0.45);
+    border-radius:2px;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--paper);
+  }
+  .offer-bar .lbl{color:var(--grey);line-height:1.35;}
+  .offer-bar .lbl b{color:var(--paper);font-weight:600;}
+  .clock{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:20px;
+    letter-spacing:2px;
+    color:var(--paper);
+    white-space:nowrap;
+    font-variant-numeric:tabular-nums;
+  }
+  .clock i{font-style:normal;font-size:11px;color:var(--grey);margin:0 6px 0 2px;letter-spacing:1px;}
+
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:32px 0 50px;
+  }
+  .screen{display:none;animation:rise .55s cubic-bezier(.16,1,.3,1);}
+  .screen.active{display:block;}
+  @keyframes rise{
+    from{opacity:0;transform:translateY(18px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .step-tag{
+    font-size:11px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    color:var(--blood);
+    margin-bottom:14px;
+    font-weight:600;
+  }
+  h1{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:34px;
+    line-height:1.15;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .sub{
+    font-size:14px;
+    color:var(--grey);
+    margin-bottom:22px;
+    line-height:1.5;
+  }
+  .nudge{
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--paper);
+    background:var(--ink);
+    border-left:2px solid var(--blood);
+    padding:10px 14px;
+    margin-bottom:22px;
+  }
+  .vline{
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:-8px 0 20px;
+  }
+  .options{display:flex;flex-direction:column;gap:12px;}
+  .opt{
+    background:var(--ink);
+    border:1px solid var(--line);
+    color:var(--paper);
+    padding:18px 20px;
+    border-radius:2px;
+    font-size:15px;
+    font-weight:500;
+    text-align:left;
+    cursor:pointer;
+    transition:all .25s ease;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+  }
+  .opt::before{
+    content:'';
+    position:absolute;
+    left:0;top:0;bottom:0;
+    width:0;
+    background:var(--blood);
+    transition:width .3s ease;
+    z-index:0;
+  }
+  .opt:hover{border-color:var(--blood);transform:translateX(4px);}
+  .opt:hover::before{width:3px;}
+  .opt .arrow{color:var(--grey);font-size:18px;transition:transform .25s ease,color .25s ease;}
+  .opt:hover .arrow{color:var(--blood);transform:translateX(3px);}
+  .opt span.tag{
+    font-size:10px;
+    color:var(--grey);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    text-align:right;
+  }
+  .opt.start{justify-content:space-between;background:var(--paper);color:var(--black);font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:14px;}
+  .opt.start .arrow{color:var(--black);}
+  .opt.start:hover{background:var(--blood);color:var(--paper);}
+  .opt.start:hover .arrow{color:var(--paper);}
+  input[type=text]{
+    width:100%;
+    background:var(--ink);
+    border:1px solid var(--line);
+    color:var(--paper);
+    padding:18px 20px;
+    font-size:15px;
+    border-radius:2px;
+    margin-bottom:18px;
+    font-family:'Inter',sans-serif;
+  }
+  input[type=text]:focus{outline:none;border-color:var(--blood);}
+  input[type=text]::placeholder{color:#555;}
+  .btn-primary{
+    width:100%;
+    background:var(--paper);
+    color:var(--black);
+    border:none;
+    padding:18px;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    border-radius:2px;
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .btn-primary:hover{background:var(--blood);color:var(--paper);}
+  .back-link{
+    display:inline-block;
+    margin-top:22px;
+    font-size:12px;
+    color:var(--grey);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    cursor:pointer;
+    border:none;
+    background:none;
+  }
+  .back-link:hover{color:var(--paper);}
+  .result-card{
+    border:1px solid var(--line);
+    padding:20px 24px;
+    background:var(--ink);
+    margin-bottom:22px;
+  }
+  .result-row{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    font-size:13px;
+  }
+  .result-row:last-child{border-bottom:none;}
+  .result-row .k{color:var(--grey);text-transform:uppercase;letter-spacing:1px;font-size:11px;}
+  .result-row .v{color:var(--paper);font-weight:500;text-align:right;}
+  footer{
+    text-align:center;
+    padding:20px 0 30px;
+    font-size:11px;
+    color:#555;
+    letter-spacing:1px;
+  }
+  .whatsapp-icon{
+    width:18px;height:18px;
+    display:inline-block;
+    vertical-align:middle;
+    margin-right:8px;
+  }
+  .btn-whatsapp{
+    width:100%;
+    background:var(--blood);
+    color:var(--paper);
+    border:none;
+    padding:18px;
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    border-radius:2px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all .25s ease;
+  }
+  .btn-whatsapp:hover{background:#c9151f;transform:translateY(-1px);}
+
+  /* Offer card (intro) */
+  .offer-card{
+    border:1px solid var(--line);
+    background:var(--ink);
+    padding:18px 20px;
+    margin-bottom:22px;
+  }
+  .offer-card .ttl{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:20px;
+    letter-spacing:2px;
+    color:var(--gold);
+    margin-bottom:10px;
+  }
+  .offer-card ul{list-style:none;}
+  .offer-card li{
+    font-size:14px;
+    line-height:1.45;
+    padding:7px 0 7px 26px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+  }
+  .offer-card li:last-child{border-bottom:none;}
+  .offer-card li::before{
+    content:'\2713';
+    position:absolute;left:0;top:7px;
+    color:var(--green);font-weight:700;
+  }
+  .offer-card li b{font-weight:600;color:var(--paper);}
+  .offer-card li em{font-style:normal;color:var(--grey);}
+  .micro{
+    text-align:center;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--grey);
+    margin-top:14px;
+  }
+
+  /* Response time badge */
+  .reply{
+    display:flex;align-items:center;gap:10px;
+    font-size:12.5px;color:var(--grey);
+    margin-bottom:14px;
+  }
+  .reply b{color:var(--paper);font-weight:600;}
+  .dot{
+    width:9px;height:9px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 0 rgba(61,220,132,.6);
+    animation:pulse 1.8s infinite;
+    flex:0 0 auto;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(61,220,132,.55);}
+    70%{box-shadow:0 0 0 9px rgba(61,220,132,0);}
+    100%{box-shadow:0 0 0 0 rgba(61,220,132,0);}
+  }
+
+  /* Voucher ticket (result) */
+  .ticket{
+    border:1px dashed var(--gold);
+    background:linear-gradient(135deg,rgba(217,178,95,.10),rgba(163,18,31,.10));
+    padding:20px 22px;
+    margin-bottom:22px;
+    text-align:center;
+  }
+  .ticket .t1{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:600;}
+  .ticket .amt{font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:1.05;letter-spacing:2px;color:var(--paper);}
+  .ticket .amt small{font-size:20px;letter-spacing:2px;color:var(--grey);}
+  .ticket .code{
+    display:inline-block;margin:6px 0 10px;padding:6px 14px;
+    border:1px solid var(--line);background:var(--black);
+    font-size:13px;letter-spacing:3px;font-weight:600;
+  }
+  .ticket .until{font-size:12px;color:var(--grey);margin-bottom:8px;}
+  .ticket .until b{color:var(--paper);font-weight:600;}
+
+  /* Instagram proof block */
+  .ig{margin:26px 0 8px;}
+  .ig .cap{
+    font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);
+    margin-bottom:10px;display:flex;justify-content:space-between;gap:10px;
+  }
+  .ig .cap a{color:var(--paper);text-decoration:none;border-bottom:1px solid var(--blood);}
+  .ig .frame{border:1px solid var(--line);background:#fff;overflow:hidden;}
+  .ig iframe{display:block;width:100%;height:430px;border:0;}
+  .ig-link{
+    display:block;text-align:center;margin-top:12px;
+    font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--paper);text-decoration:none;border:1px solid var(--line);padding:13px;
+  }
+  .ig-link:hover{border-color:var(--blood);}
+  @media (max-width:380px){
+    .clock{font-size:17px;}
+    h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="wrap">
+  <header>
+    <div class="logo">INK<span>.</span>MATCH</div>
+    <div class="locale">DUBLIN &middot; REALISM</div>
+  </header>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- Voucher reserved + live countdown (visible on every screen) -->
+  <div class="offer-bar" id="offerBar">
+    <div class="lbl"><b>Your voucher is reserved</b><br>until <span id="untilShort">&hellip;</span></div>
+    <div class="clock" id="clock">30<i>d</i>00<i>h</i>00<i>m</i>00<i>s</i></div>
+  </div>
+
+  <main>
+
+    <!-- Intro -->
+    <section class="screen active" data-screen="intro">
+      <div class="step-tag">60 SECOND MATCH &middot; FREE CONSULTATION</div>
+      <h1>LET'S FIND YOUR PERFECT PIECE</h1>
+      <p class="sub">Five quick questions. No fluff, no messing about. Tell us what's on your mind and we'll match you with the right slot with Gabriel &mdash; straight talk, sorted.</p>
+
+      <div class="offer-card">
+        <div class="ttl">WHAT YOU GET WHEN YOU FINISH</div>
+        <ul>
+          <li><b>FREE consultation</b> <em>+ a custom design plan for your idea</em></li>
+          <li><b>Quiz voucher: up to <span data-cfg="maxVoucher">&euro;150</span> off</b> your session <em>(the bigger the piece, the bigger the voucher)</em></li>
+          <li><b>Voucher locked in for 30 days</b> <em>&mdash; book when it suits you</em></li>
+          <li><b>Replies in <span data-cfg="reply">under 1 hour</span></b> <em>(typical, on WhatsApp)</em></li>
+        </ul>
+      </div>
+
+      <div class="options">
+        <button class="opt start" onclick="startQuiz()"><span>Start the quiz &mdash; 40 seconds</span><span class="arrow">&rarr;</span></button>
+      </div>
+      <div class="micro">No sign-up &middot; No spam &middot; Straight to the artist</div>
+
+      <div class="ig">
+        <div class="cap"><span>Recent work, live from Instagram</span><a href="https://www.instagram.com/gabrielsoarestattoo/" target="_blank" rel="noopener" onclick="trackIG('intro')">@gabrielsoarestattoo</a></div>
+        <div class="frame"><iframe loading="lazy" title="Gabriel Soares on Instagram" src="https://www.instagram.com/gabrielsoarestattoo/embed/" scrolling="no" allowtransparency="true"></iframe></div>
+      </div>
+    </section>
+
+    <!-- Q1 -->
+    <section class="screen" data-screen="1">
+      <div class="step-tag" data-steptag>STEP 1 OF 5</div>
+      <h1>WHAT STYLE ARE YOU AFTER?</h1>
+      <p class="sub">Pick the one that's closest to what you've got in your head.</p>
+      <div class="nudge">&#127919; Gabriel's speciality is <b>Black &amp; Grey Realism</b> &mdash; 270+ pieces and 11K+ followers on Instagram. Pick Realism if that's your thing.</div>
+      <div class="vline" data-vline>&#127903; Finish the quiz to unlock your voucher</div>
+      <div class="options">
+        <button class="opt" onclick="selectAnswer('style','Realism')">Realism<span class="tag">Our specialty</span></button>
+        <button class="opt" onclick="selectAnswer('style','Fine line')">Fine line<span class="tag">Subtle &amp; clean</span></button>
+        <button class="opt" onclick="selectAnswer('style','Blackwork')">Blackwork<span class="tag">Bold &amp; solid</span></button>
+        <button class="opt" onclick="selectAnswer('style','Colour work')">Colour work<span class="tag">Vivid &amp; detailed</span></button>
+      </div>
+      <button class="back-link" onclick="back()">&larr; Back</button>
+    </section>
+
+    <!-- Q2 -->
+    <section class="screen" data-screen="2">
+      <div class="step-tag" data-steptag>STEP 2 OF 5</div>
+      <h1>WHAT SIZE ARE WE TALKING?</h1>
+      <p class="sub">Rough size is grand &mdash; no need to be exact.</p>
+      <div class="nudge">&#128161; <b>Size sets your voucher.</b> Small pieces unlock a smaller voucher, a full sleeve unlocks the biggest one.</div>
+      <div class="vline" data-vline>&#127903; Finish the quiz to unlock your voucher</div>
+      <div class="options">
+        <button class="opt" onclick="selectAnswer('size','Small (palm-sized or under)','small')">Small<span class="tag">Palm-sized or under &middot; <span data-v="small"></span> off</span></button>
+        <button class="opt" onclick="selectAnswer('size','Medium (forearm / calf)','medium')">Medium<span class="tag">Forearm / calf &middot; <span data-v="medium"></span> off</span></button>
+        <button class="opt" onclick="selectAnswer('size','Large (thigh / back panel)','large')">Large<span class="tag">Thigh / back panel &middot; <span data-v="large"></span> off</span></button>
+        <button class="opt" onclick="selectAnswer('size','Full sleeve or large-scale piece','sleeve')">Full sleeve+<span class="tag">Large-scale piece &middot; <span data-v="sleeve"></span> off</span></button>
+      </div>
+      <button class="back-link" onclick="back()">&larr; Back</button>
+    </section>
+
+    <!-- Q3 -->
+    <section class="screen" data-screen="3">
+      <div class="step-tag" data-steptag>STEP 3 OF 5</div>
+      <h1>DO YOU HAVE A REFERENCE SORTED?</h1>
+      <p class="sub">Even a rough idea helps us prep for your consult.</p>
+      <div class="nudge">&#128206; Got a photo or screenshot? You'll send it on WhatsApp at the end, and Gabriel starts <b>your design plan before you even book</b>.</div>
+      <div class="vline" data-vline>&#127903; Voucher locked in</div>
+      <div class="options">
+        <button class="opt" onclick="selectAnswer('reference','Yes, I know exactly what I want')">Yes<span class="tag">Know exactly what I want</span></button>
+        <button class="opt" onclick="selectAnswer('reference','Sort of, I have a rough idea')">Sort of<span class="tag">Rough idea</span></button>
+        <button class="opt" onclick="selectAnswer('reference','Just researching for now')">Not yet<span class="tag">Just researching</span></button>
+      </div>
+      <button class="back-link" onclick="back()">&larr; Back</button>
+    </section>
+
+    <!-- Q4 -->
+    <section class="screen" data-screen="4">
+      <div class="step-tag" data-steptag>STEP 4 OF 5</div>
+      <h1>WHAT'S YOUR BUDGET RANGE?</h1>
+      <p class="sub">Helps us recommend the right session length. All prices in euro.</p>
+      <div class="nudge">&#128274; Honest numbers, honest quote. No hard sell &mdash; just the right session length for your piece, <b>before</b> you pay anything.</div>
+      <div class="vline" data-vline>&#127903; Voucher locked in</div>
+      <div class="options">
+        <button class="opt" onclick="selectAnswer('budget','&euro;150 &ndash; &euro;300','b1')">&euro;150 &ndash; &euro;300</button>
+        <button class="opt" onclick="selectAnswer('budget','&euro;300 &ndash; &euro;600','b2')">&euro;300 &ndash; &euro;600</button>
+        <button class="opt" onclick="selectAnswer('budget','&euro;600 &ndash; &euro;1,200','b3')">&euro;600 &ndash; &euro;1,200</button>
+        <button class="opt" onclick="selectAnswer('budget','&euro;1,200+','b4')">&euro;1,200+</button>
+      </div>
+      <button class="back-link" onclick="back()">&larr; Back</button>
+    </section>
+
+    <!-- Q5 -->
+    <section class="screen" data-screen="5">
+      <div class="step-tag" data-steptag>STEP 5 OF 5</div>
+      <h1>WHEN DO YOU WANT TO BOOK?</h1>
+      <p class="sub">Gabriel is only in Dublin for a limited stretch &mdash; good to know your timing.</p>
+      <div class="nudge">&#9203; <span data-cfg="travelNote">Dublin dates are limited, and slots go to whoever replies first.</span> Your voucher stays valid for 30 days.</div>
+      <div class="vline" data-vline>&#127903; Last question &mdash; your voucher is almost yours</div>
+      <div class="options">
+        <button class="opt" onclick="selectAnswer('timing','This week')">This week<span class="tag">ASAP</span></button>
+        <button class="opt" onclick="selectAnswer('timing','Next 2 weeks')">Next 2 weeks</button>
+        <button class="opt" onclick="selectAnswer('timing','Not sure yet')">Not sure yet</button>
+      </div>
+      <button class="back-link" onclick="back()">&larr; Back</button>
+    </section>
+
+    <!-- Name capture -->
+    <section class="screen" data-screen="name">
+      <div class="step-tag">ALMOST THERE</div>
+      <h1>WHAT'S YOUR NAME?</h1>
+      <p class="sub">So we know who we're talking to when your message lands.</p>
+      <div class="nudge">&#127903; <b>Your voucher is ready.</b> One last thing and it's yours, with your match and your reserved date.</div>
+      <input type="text" id="nameInput" placeholder="Your first name">
+      <button class="btn-primary" onclick="submitName()">Claim my voucher &amp; see my match &rarr;</button>
+    </section>
+
+    <!-- Result -->
+    <section class="screen" data-screen="result">
+      <div class="step-tag">YOU'RE SORTED</div>
+      <h1 id="resultHeadline">GREAT FIT FOR OUR STUDIO</h1>
+      <p class="sub" id="resultSub">Based on what you've told us, this is exactly the kind of work we love doing. Send this straight to us on WhatsApp and we'll get back to you with real availability today.</p>
+
+      <div class="ticket">
+        <div class="t1">YOUR QUIZ VOUCHER</div>
+        <div class="amt" id="tAmt">&euro;50 <small>OFF</small></div>
+        <div class="code" id="tCode">GS-0000</div>
+        <div class="until">Valid until <b id="tUntil">&hellip;</b></div>
+        <div class="clock" id="clock2">30<i>d</i>00<i>h</i>00<i>m</i>00<i>s</i></div>
+      </div>
+
+      <div class="result-card" id="resultCard"></div>
+
+      <div class="reply"><span class="dot"></span><span>Typical reply: <b data-cfg="reply">under 1 hour</b> on WhatsApp</span></div>
+
+      <button class="btn-whatsapp" onclick="sendToWhatsApp()">
+        <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.6 1.1 2.8c.2.2 1.7 2.6 4.1 3.5 2.4.9 2.4.6 2.9.5.4-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.9-1.3C8.4 21.5 10.2 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+        CLAIM MY FREE CONSULTATION
+      </button>
+      <div class="micro">Send your reference photo right after &middot; Gabriel preps your design</div>
+
+      <div class="ig">
+        <div class="cap"><span>The work you're booking</span><a href="https://www.instagram.com/gabrielsoarestattoo/" target="_blank" rel="noopener" onclick="trackIG('result')">@gabrielsoarestattoo</a></div>
+        <div class="frame"><iframe loading="lazy" title="Gabriel Soares on Instagram" src="https://www.instagram.com/gabrielsoarestattoo/embed/" scrolling="no" allowtransparency="true"></iframe></div>
+        <a class="ig-link" href="https://www.instagram.com/gabrielsoarestattoo/" target="_blank" rel="noopener" onclick="trackIG('result_button')">See the healed work on Instagram &rarr;</a>
+      </div>
+
+      <button class="back-link" onclick="restart()">&larr; Start over</button>
+    </section>
+
+  </main>
+
+  <footer>YOUR ANSWERS GO STRAIGHT TO OUR ARTIST &middot; NO SPAM &middot; NO SIGN-UP</footer>
+</div>
+
+<script>
+  /* =====================================================================
+     CONFIG: edit only this block
+     ===================================================================== */
+  var CONFIG = {
+    waNumber: '353838682516',            // WhatsApp (no + or spaces)
+    igUser:   'gabrielsoarestattoo',
+    voucherDays: 30,                     // voucher validity, counted from the visitor's first visit
+    // Voucher value (EUR) by piece size. Gabriel must honour these.
+    voucher: { small: 20, medium: 50, large: 100, sleeve: 150 },
+    reply: 'under 1 hour',               // typical WhatsApp response time (keep it true)
+    travelNote: 'Gabriel is in Dublin in November — slots go to whoever replies first.',
+    // Pixel "value" sent with the Lead event (midpoint of the chosen budget)
+    budgetValue: { b1: 225, b2: 450, b3: 900, b4: 1500 },
+    storageKey: 'inkmatch_voucher_deadline'
+  };
+
+  /* =====================================================================
+     State
+     ===================================================================== */
+  var QUESTIONS = ['1','2','3','4','5'];
+  var answers = {style:'',size:'',reference:'',budget:'',timing:'',name:''};
+  var codes = {size:'',budget:''};
+  var flow = [];          // active screens in order
+  var currentIndex = 0;
+  var quizStarted = false;
+  var leadSent = false;
+  var deadline = 0;
+  var presetStyle = '';
+  var urlRef = '';
+
+  /* =====================================================================
+     Pixel helper
+     ===================================================================== */
+  function track(name, params, custom){
+    try{
+      if (typeof fbq === 'undefined') return;
+      if (custom){ fbq('trackCustom', name, params || {}); }
+      else { fbq('track', name, params || {}); }
+    }catch(e){}
+  }
+  function trackIG(where){ track('InstagramClick', {where: where}, true); }
+
+  /* =====================================================================
+     URL params: ?style=realism skips Q1; utm_* is passed to WhatsApp
+     ===================================================================== */
+  function readParams(){
+    var p;
+    try{ p = new URLSearchParams(window.location.search); }catch(e){ return; }
+    urlRef = p.get('utm_content') || p.get('utm_campaign') || p.get('utm_source') || p.get('ref') || '';
+    var s = (p.get('style') || '').toLowerCase().replace(/[^a-z]/g,'');
+    var map = {realism:'Realism', fineline:'Fine line', blackwork:'Blackwork', colour:'Colour work', color:'Colour work', colourwork:'Colour work'};
+    if (map[s]){ presetStyle = map[s]; answers.style = presetStyle; }
+  }
+
+  function buildFlow(){
+    flow = ['intro'];
+    var i;
+    for (i = 0; i < QUESTIONS.length; i++){
+      if (QUESTIONS[i] === '1' && presetStyle) continue;
+      flow.push(QUESTIONS[i]);
+    }
+    flow.push('name'); flow.push('result');
+  }
+  function questionCount(){ return presetStyle ? 4 : 5; }
+
+  /* =====================================================================
+     Evergreen 30-day voucher countdown
+     Deadline = first visit + 30 days, stored in the browser, so the
+     visitor always sees their own real 30 days from today.
+     ===================================================================== */
+  function loadDeadline(){
+    var now = Date.now(), d = 0;
+    try{
+      var s = window.localStorage.getItem(CONFIG.storageKey);
+      d = s ? parseInt(s, 10) : 0;
+    }catch(e){}
+    if (!d || d <= now){
+      d = now + CONFIG.voucherDays * 86400000;
+      try{ window.localStorage.setItem(CONFIG.storageKey, String(d)); }catch(e){}
+    }
+    return d;
+  }
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function clockHTML(ms){
+    if (ms < 0) ms = 0;
+    var s = Math.floor(ms / 1000);
+    var d = Math.floor(s / 86400); s -= d * 86400;
+    var h = Math.floor(s / 3600);  s -= h * 3600;
+    var m = Math.floor(s / 60);    s -= m * 60;
+    return pad(d) + '<i>d</i>' + pad(h) + '<i>h</i>' + pad(m) + '<i>m</i>' + pad(s) + '<i>s</i>';
+  }
+  function fmtDate(ts, short){
+    try{
+      return new Date(ts).toLocaleDateString('en-IE', short
+        ? {day:'numeric', month:'short'}
+        : {weekday:'short', day:'numeric', month:'long', year:'numeric'});
+    }catch(e){ return new Date(ts).toDateString(); }
+  }
+  function tick(){
+    var left = deadline - Date.now();
+    if (left <= 0){ deadline = loadDeadline(); left = deadline - Date.now(); refreshDates(); }
+    var html = clockHTML(left);
+    var a = document.getElementById('clock'), b = document.getElementById('clock2');
+    if (a) a.innerHTML = html;
+    if (b) b.innerHTML = html;
+  }
+  function refreshDates(){
+    var us = document.getElementById('untilShort'); if (us) us.textContent = fmtDate(deadline, true);
+    var tu = document.getElementById('tUntil');     if (tu) tu.textContent = fmtDate(deadline, false);
+  }
+
+  /* =====================================================================
+     Voucher
+     ===================================================================== */
+  function euro(n){ return '€' + n; }
+  function voucherAmount(){
+    return codes.size ? CONFIG.voucher[codes.size] : 0;
+  }
+  function maxVoucher(){
+    var m = 0, k;
+    for (k in CONFIG.voucher){ if (CONFIG.voucher[k] > m) m = CONFIG.voucher[k]; }
+    return m;
+  }
+  function voucherCode(){
+    var tail = deadline.toString(36).toUpperCase().slice(-4);
+    var sz = codes.size ? codes.size.charAt(0).toUpperCase() : 'X';
+    return 'GS-' + sz + tail;
+  }
+  function fillConfigText(){
+    var els = document.querySelectorAll('[data-cfg]'), i, k;
+    for (i = 0; i < els.length; i++){
+      k = els[i].getAttribute('data-cfg');
+      if (k === 'maxVoucher') els[i].textContent = euro(maxVoucher());
+      else if (CONFIG[k]) els[i].textContent = CONFIG[k];
+    }
+    var vs = document.querySelectorAll('[data-v]');
+    for (i = 0; i < vs.length; i++){
+      vs[i].textContent = euro(CONFIG.voucher[vs[i].getAttribute('data-v')]);
+    }
+  }
+
+  /* =====================================================================
+     Navigation
+     ===================================================================== */
+  function showScreen(key){
+    var screens = document.querySelectorAll('.screen'), i;
+    for (i = 0; i < screens.length; i++){ screens[i].classList.remove('active'); }
+    document.querySelector('[data-screen="' + key + '"]').classList.add('active');
+  }
+
+  function updateDynamicText(key){
+    var total = questionCount();
+    var qpos = flow.indexOf(key);          // 1-based because intro is index 0
+    var tag = document.querySelector('[data-screen="' + key + '"] [data-steptag]');
+    if (tag) tag.textContent = 'STEP ' + qpos + ' OF ' + total;
+
+    var lines = document.querySelectorAll('[data-screen="' + key + '"] [data-vline]');
+    if (lines.length){
+      var txt;
+      if (voucherAmount()){
+        var left = total - qpos + 1;
+        txt = '🎫 ' + euro(voucherAmount()) + ' voucher locked in — ' +
+              (left <= 1 ? 'last question to claim it' : left + ' questions left to claim it');
+      } else {
+        txt = '🎫 Finish the quiz to unlock up to ' + euro(maxVoucher()) + ' off';
+      }
+      lines[0].textContent = txt;
+    }
+  }
+
+  function goTo(stepIndex){
+    var key = flow[stepIndex];
+    showScreen(key);
+    currentIndex = stepIndex;
+    var answered = Math.max(0, Math.min(stepIndex - 1, questionCount()));
+    var pct = key === 'name' || key === 'result' ? 100 : (answered / questionCount()) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    window.scrollTo(0, 0);
+    updateDynamicText(key);
+  }
+
+  function startQuiz(){
+    if (!quizStarted){
+      quizStarted = true;
+      track('QuizStarted', {preset_style: presetStyle || 'none', ref: urlRef}, true);
+    }
+    goTo(1);
+  }
+
+  function back(){
+    if (currentIndex > 0) goTo(currentIndex - 1);
+  }
+
+  function selectAnswer(field, value, code){
+    answers[field] = value;
+    if (field === 'size') codes.size = code;
+    if (field === 'budget') codes.budget = code;
+    var key = flow[currentIndex];
+    track('QuizStep' + key, {answer: value, step: key}, true);
+    goTo(currentIndex + 1);
+  }
+
+  /* =====================================================================
+     Submit + result
+     ===================================================================== */
+  function submitName(){
+    var val = document.getElementById('nameInput').value.trim();
+    answers.name = val || 'Friend';
+    buildResult();
+    goTo(flow.indexOf('result'));
+
+    if (!leadSent){
+      leadSent = true;
+      var value = CONFIG.budgetValue[codes.budget] || 0;
+      track('QuizCompleted', {style: answers.style, size: codes.size, budget: codes.budget, timing: answers.timing, ref: urlRef}, true);
+      track('Lead', value ? {value: value, currency: 'EUR'} : {});
+      var highBudget = (codes.budget === 'b3' || codes.budget === 'b4');
+      var urgent = (answers.timing === 'This week' || answers.timing === 'Next 2 weeks');
+      if (highBudget && urgent){
+        track('QualifiedLead', {value: value, currency: 'EUR'}, true);
+      }
+    }
+  }
+
+  function buildResult(){
+    var card = document.getElementById('resultCard');
+    card.innerHTML =
+      row('Style', answers.style) +
+      row('Size', answers.size) +
+      row('Reference', answers.reference) +
+      row('Budget', answers.budget) +
+      row('Timing', answers.timing);
+
+    var amt = voucherAmount();
+    document.getElementById('tAmt').innerHTML = euro(amt) + ' <small>OFF</small>';
+    document.getElementById('tCode').textContent = voucherCode();
+    refreshDates();
+
+    var headline = document.getElementById('resultHeadline');
+    var sub = document.getElementById('resultSub');
+    var name = answers.name;
+    if (answers.style === 'Realism'){
+      headline.textContent = name.toUpperCase() + ', THIS IS EXACTLY OUR THING';
+      sub.textContent = "Realism is Gabriel's main style, this is precisely the kind of piece he's in Dublin to create. Claim your free consultation on WhatsApp and we'll sort your slot with your " + euro(amt) + " voucher applied.";
+    } else {
+      headline.textContent = name.toUpperCase() + ', GREAT FIT FOR OUR STUDIO';
+      sub.textContent = "Based on what you've told us, we'd love to work on this with you. Claim your free consultation on WhatsApp and we'll get back with real availability today, with your " + euro(amt) + " voucher applied.";
+    }
+  }
+
+  function row(label, value){
+    return '<div class="result-row"><span class="k">' + label + '</span><span class="v">' + value + '</span></div>';
+  }
+
+  function sendToWhatsApp(){
+    var msg =
+      "Hi Gabriel! I just did the tattoo quiz, here's what I'm after:\n\n" +
+      "Name: " + answers.name + "\n" +
+      "Style: " + answers.style + "\n" +
+      "Size: " + answers.size + "\n" +
+      "Reference: " + answers.reference + "\n" +
+      "Budget: " + answers.budget + "\n" +
+      "Timing: " + answers.timing + "\n\n" +
+      "Quiz voucher: " + voucherCode() + " (" + euro(voucherAmount()) + " off), valid until " + fmtDate(deadline, false) + "\n" +
+      (urlRef ? "Ref: " + urlRef + "\n" : "") +
+      "\nI'd love to claim my FREE consultation! I'll send my reference photo now.";
+    var encoded = encodeURIComponent(msg);
+    var url = "https://wa.me/" + CONFIG.waNumber + "?text=" + encoded;
+
+    track('Contact', {style: answers.style, size: codes.size, ref: urlRef});
+    track('WhatsAppClick', {voucher: voucherCode(), ref: urlRef}, true);
+
+    // Small delay so the pixel requests can leave before the redirect
+    setTimeout(function(){ window.location.href = url; }, 250);
+  }
+
+  function restart(){
+    var k;
+    for (k in answers){ answers[k] = ''; }
+    codes.size = ''; codes.budget = '';
+    if (presetStyle) answers.style = presetStyle;
+    quizStarted = false;
+    leadSent = false;
+    goTo(0);
+  }
+
+  /* =====================================================================
+     Init
+     ===================================================================== */
+  readParams();
+  buildFlow();
+  deadline = loadDeadline();
+  fillConfigText();
+  refreshDates();
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
